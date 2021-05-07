@@ -74,5 +74,5 @@ extensions.findByName("buildScan")?.withGroovyBuilder {
 }
 
 springBoot {
-    mainClass.set("io.moderne.ingest.Action")
+    mainClass.set("io.moderne.ingest.IngestActionApplication")
 }
