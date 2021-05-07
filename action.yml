@@ -1,0 +1,14 @@
+name: 'Ingest'
+description: 'Ingest the thing'
+inputs:
+  project-dir:
+    description: 'Project directory'
+    required: true
+  style-name:
+    description: 'Style name'
+    required: false
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.project-dir }}

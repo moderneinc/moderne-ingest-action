@@ -1,0 +1,29 @@
+name: geotools ingest
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    name: Ingest geotools
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: main
+      - name: Checkout geotools
+        uses: actions/checkout@v2
+        with:
+          repository: 'https://github.com/geotools/geotools.git'
+          path: target
+      - uses: google-github-actions/setup-gcloud@v0.2.1
+        with:
+          service_account_key: ${{ secrets.GCR_KEY }}
+      - name: Ingest
+        uses: ./
+        id: ingest
+        with:
+          project-dir: $GITHUB_WORKSPACE/target
