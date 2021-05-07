@@ -25,5 +25,3 @@ jobs:
       - name: Ingest
         uses: ./main
         id: ingest
-        with:
-          project-dir: $GITHUB_WORKSPACE/target
