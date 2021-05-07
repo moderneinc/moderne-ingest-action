@@ -1,3 +1,3 @@
 #!/bin/sh -l
 
-main/gradlew bootRun
+$GITHUB_WORKSPACE/main//gradlew bootRun
