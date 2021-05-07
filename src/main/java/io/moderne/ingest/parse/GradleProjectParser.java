@@ -21,6 +21,7 @@ import org.openrewrite.xml.XmlParser;
 import org.openrewrite.yaml.YamlParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,6 +41,7 @@ import java.util.regex.Pattern;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
+@Component
 public class GradleProjectParser implements ProjectParser {
     private static final Logger log = LoggerFactory.getLogger(GradleProjectParser.class);
 

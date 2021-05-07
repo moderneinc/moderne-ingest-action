@@ -14,6 +14,7 @@ import org.openrewrite.marker.Markers;
 import org.openrewrite.style.NamedStyles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.net.URI;
@@ -29,6 +30,7 @@ import java.util.concurrent.Executors;
 
 import static java.util.stream.Collectors.toList;
 
+@Component
 public class IngestService {
 
     private final Logger log = LoggerFactory.getLogger(IngestService.class);

@@ -14,12 +14,14 @@ import org.openrewrite.maven.internal.MavenParsingException;
 import org.openrewrite.maven.utilities.MavenArtifactDownloader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Component
 public class MavenProjectParser implements ProjectParser {
 
     private final Logger log = LoggerFactory.getLogger(MavenProjectParser.class);

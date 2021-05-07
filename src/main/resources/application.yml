@@ -1,0 +1,13 @@
+spring:
+  application.name: ingest
+  profiles.default: dev
+logging:
+  level:
+    ROOT: info
+---
+spring:
+  config.activate.on-profile: '!prod'
+  cloud:
+    gcp:
+      core.enabled: false
+      storage.enabled: false

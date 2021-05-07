@@ -5,12 +5,16 @@ import org.apache.commons.compress.compressors.lzma.LZMACompressorOutputStream;
 import org.openrewrite.SourceFile;
 import org.openrewrite.TreeSerializer;
 import org.openrewrite.marker.GitProvenance;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+@Profile("!prod")
+@Component
 public class LocalDiskSourceFileRepository implements SourceFileRepository {
 
     @Override

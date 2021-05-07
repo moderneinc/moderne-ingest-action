@@ -2,10 +2,14 @@ package io.moderne.ingest.store;
 
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Storage;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.nio.channels.Channels;
 
+@Profile("prod")
+@Component
 public class GcsStyleRepository implements StyleRepository {
 
     private static final String BUCKET_NAME = "moderne-styles";

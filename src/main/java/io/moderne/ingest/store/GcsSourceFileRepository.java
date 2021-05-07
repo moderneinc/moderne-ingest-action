@@ -11,6 +11,8 @@ import org.openrewrite.TreeSerializer;
 import org.openrewrite.marker.GitProvenance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +22,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+@Profile("prod")
+@Component
 public class GcsSourceFileRepository implements SourceFileRepository {
 
     private static final String BUCKET_NAME = "moderne-ast";
