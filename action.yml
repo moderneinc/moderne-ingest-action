@@ -10,5 +10,3 @@ inputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  env:
-    GCP_SERVICE_ACCOUNT_KEY: ${{ inputs.gcp_service_account_key }}
