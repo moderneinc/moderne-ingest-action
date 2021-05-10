@@ -8,6 +8,4 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   env:
-    GCR_KEY: ${{ secrets.GCR_KEY }}
-  args:
-    - ${{ inputs.project-dir }}
+    GCP_SERVICE_ACCOUNT_KEY: ${{ inputs.gcp_service_account_key }}

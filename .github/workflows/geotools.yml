@@ -19,9 +19,11 @@ jobs:
         with:
           repository: geotools/geotools
           path: target
-      - uses: google-github-actions/setup-gcloud@v0.2.1
-        with:
-          service_account_key: ${{ secrets.GCR_KEY }}
+#      - uses: google-github-actions/setup-gcloud@v0.2.1
+#        with:
+#          service_account_key: ${{ secrets.GCR_KEY }}
       - name: Ingest
         uses: ./main
         id: ingest
+        with:
+          gcp_service_account_key: ${{ secrets.GCR_KEY }}
