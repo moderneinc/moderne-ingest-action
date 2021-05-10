@@ -1,4 +1,4 @@
-name: geotools ingest
+name: jackson-annotations ingest
 
 on:
   schedule:
