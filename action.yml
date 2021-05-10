@@ -1,10 +1,10 @@
 name: 'Ingest'
 description: 'Ingest the thing'
 inputs:
-  style-name:
+  styleName:
     description: 'Style name'
     required: false
-  gcp-service-account-key:
+  gcpKey:
     description: 'GCP service account key'
     required: true
 runs:

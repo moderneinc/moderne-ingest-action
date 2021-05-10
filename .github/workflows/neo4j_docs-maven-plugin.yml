@@ -23,4 +23,4 @@ jobs:
         uses: ./main
         id: ingest
         with:
-          gcp-service-account-key: ${{ secrets.GCR_KEY }}
+          gcpKey: ${{ secrets.GCR_KEY }}
