@@ -8,7 +8,7 @@ on:
 jobs:
   ingest:
     runs-on: ubuntu-latest
-    name: Ingest geotools
+    name: Ingest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
