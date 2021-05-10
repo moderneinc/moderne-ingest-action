@@ -3,7 +3,7 @@ spring:
   profiles.default: dev
 logging:
   level:
-    ROOT: debug
+    ROOT: info
 ---
 spring:
   config.activate.on-profile: '!prod'
