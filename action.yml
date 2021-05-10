@@ -4,6 +4,9 @@ inputs:
   style-name:
     description: 'Style name'
     required: false
+  gcp_service_account_key:
+    description: 'GCP service account key'
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
