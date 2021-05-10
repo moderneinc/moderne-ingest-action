@@ -5,7 +5,7 @@ FROM $from
 # Downloading gcloud package
 RUN \
     apt-get update \
-    && apt-get install -y wget python \
+    && apt-get install -y wget python3 \
     && wget -O /tmp/google-cloud-sdk.tar.gz https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz
 
 # Installing the package
