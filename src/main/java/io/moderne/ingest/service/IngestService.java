@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -39,7 +37,6 @@ public class IngestService {
     private final GradleProjectParser gradleProjectParser;
     private final SourceFileRepository sourceFileRepository;
     private final StyleRepository styleRepository;
-    private final ExecutorService executorService;
 
     public IngestService(MavenProjectParser mavenProjectParser,
                          GradleProjectParser gradleProjectParser, SourceFileRepository sourceFileRepository,
@@ -48,7 +45,6 @@ public class IngestService {
         this.gradleProjectParser = gradleProjectParser;
         this.sourceFileRepository = sourceFileRepository;
         this.styleRepository = styleRepository;
-        this.executorService = Executors.newFixedThreadPool(2);
     }
 
     public void ingest(Path projectDir, @Nullable String styleName) {
@@ -67,32 +63,29 @@ public class IngestService {
 
         GitProvenance git = GitProvenance.fromProjectDirectory(projectDir);
 
-        executorService.execute(() -> {
-
-            try {
-                ParseResult parseResult;
-                if (Files.exists(projectDir.resolve("build.gradle")) || Files.exists(projectDir.resolve("build.gradle.kts"))) {
-                    log.info("Parsing gradle project");
-                    parseResult = gradleProjectParser.parse(projectDir);
-                } else if (Files.exists(projectDir.resolve("pom.xml"))) {
-                    log.info("Parsing maven project");
-                    parseResult = mavenProjectParser.parse(projectDir);
-                } else {
-                    throw new IllegalArgumentException(projectDir + " doesn't contain build.gradle, build.gradle.kts, or pom.xml. Unable to parse project.");
-                }
-                if (finalNamedStyles != null) {
-                    parseResult.setSourceFiles(parseResult.getSourceFiles().stream().map(sf -> {
-                        List<Marker> markers = new ArrayList<>(sf.getMarkers().entries());
-                        markers.addAll(finalNamedStyles);
-                        return sf.withMarkers(Markers.build(markers));
-                    }).map(SourceFile.class::cast).collect(toList()));
-                }
-
-                log.info("Storing AST");
-                sourceFileRepository.store(parseResult);
-            } catch (Exception e) {
-                log.error("Exception ingesting", e);
+        try {
+            ParseResult parseResult;
+            if (Files.exists(projectDir.resolve("build.gradle")) || Files.exists(projectDir.resolve("build.gradle.kts"))) {
+                log.info("Parsing gradle project");
+                parseResult = gradleProjectParser.parse(projectDir);
+            } else if (Files.exists(projectDir.resolve("pom.xml"))) {
+                log.info("Parsing maven project");
+                parseResult = mavenProjectParser.parse(projectDir);
+            } else {
+                throw new IllegalArgumentException(projectDir + " doesn't contain build.gradle, build.gradle.kts, or pom.xml. Unable to parse project.");
             }
-        });
+            if (finalNamedStyles != null) {
+                parseResult.setSourceFiles(parseResult.getSourceFiles().stream().map(sf -> {
+                    List<Marker> markers = new ArrayList<>(sf.getMarkers().entries());
+                    markers.addAll(finalNamedStyles);
+                    return sf.withMarkers(Markers.build(markers));
+                }).map(SourceFile.class::cast).collect(toList()));
+            }
+
+            log.info("Storing AST");
+            sourceFileRepository.store(parseResult);
+        } catch (Exception e) {
+            log.error("Exception ingesting", e);
+        }
     }
 }
