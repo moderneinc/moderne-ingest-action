@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Ingest
     steps:
-      - name: Checkout
+      - name: Checkout self
         uses: actions/checkout@v2
         with:
           path: main
-      - name: Checkout geotools
+      - name: Checkout target
         uses: actions/checkout@v2
         with:
           repository: geotools/geotools
