@@ -1,0 +1,26 @@
+name: geotools ingest
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    name: Ingest geotools
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: main
+      - name: Checkout geotools
+        uses: actions/checkout@v2
+        with:
+          repository: FasterXML/jackson-annotations
+          path: target
+      - name: Ingest
+        uses: ./main
+        id: ingest
+        with:
+          gcp_service_account_key: ${{ secrets.GCR_KEY }}
