@@ -4,7 +4,7 @@ inputs:
   style-name:
     description: 'Style name'
     required: false
-  gcp_service_account_key:
+  gcp-service-account-key:
     description: 'GCP service account key'
     required: true
 runs:

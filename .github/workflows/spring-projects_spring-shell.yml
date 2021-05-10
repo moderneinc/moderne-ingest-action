@@ -1,0 +1,27 @@
+name: spring-projects/spring-shell ingest
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    name: Ingest
+    steps:
+      - name: Checkout self
+        uses: actions/checkout@v2
+        with:
+          path: main
+      - name: Checkout target
+        uses: actions/checkout@v2
+        with:
+          repository: spring-projects/spring-shell
+          path: target
+      - name: Ingest
+        uses: ./main
+        id: ingest
+        with:
+          gcp-service-account-key: ${{ secrets.GCR_KEY }}
+          style-name: spring

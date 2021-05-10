@@ -1,4 +1,4 @@
-name: jackson-annotations ingest
+name: qos-ch/slf4j ingest
 
 on:
   schedule:
@@ -17,10 +17,10 @@ jobs:
       - name: Checkout target
         uses: actions/checkout@v2
         with:
-          repository: FasterXML/jackson-annotations
+          repository: qos-ch/slf4j
           path: target
       - name: Ingest
         uses: ./main
         id: ingest
         with:
-          gcp_service_account_key: ${{ secrets.GCR_KEY }}
+          gcp-service-account-key: ${{ secrets.GCR_KEY }}
