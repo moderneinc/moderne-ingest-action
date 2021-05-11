@@ -122,7 +122,7 @@ public class GradleProjectParser implements ProjectParser {
                 sourceFiles.addAll(new YamlParser().parse(getSources(resourceDirectory, "yml"), projectDir, ctx));
                 sourceFiles.addAll(new PropertiesParser().parse(getSources(resourceDirectory, "properties"), projectDir, ctx));
             } else {
-                JavaParser javaParser = JavaParser.fromJavaVersion()
+                JavaParser javaParser = JavaParser.fromJavaVersion().logCompilationWarningsAndErrors(true)
                         .classpath(dependencies(project, rootProject))
                         .build();
                 sourceFiles.addAll(javaParser.parse(getSources(sourceDirectory.getDirectory(), "java"), projectDir, ctx));
