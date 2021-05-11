@@ -23,7 +23,8 @@ public class LocalDiskSourceFileRepository implements SourceFileRepository {
         List<SourceFile> sourceFiles = parseResult.getSourceFiles();
         if (!sourceFiles.isEmpty()) {
             File astFile = new File(System.getProperty("user.home"),
-                    "rewrite-offline/" + gitProvenance.getOrganizationName() + "/" + gitProvenance.getRepositoryName() + ".ast");
+                    "rewrite-offline/" + gitProvenance.getOrganizationName() + "/" +
+                            gitProvenance.getRepositoryName() + ".ast.tmp");
 
             if (astFile.exists()) {
                 if (!astFile.delete()) {
@@ -44,6 +45,13 @@ public class LocalDiskSourceFileRepository implements SourceFileRepository {
                 fos.flush();
             } catch (IOException e) {
                 throw new RuntimeException("Failed to write AST file", e);
+            }
+
+            File astCompleteFile = new File(System.getProperty("user.home"), "rewrite-offline/" +
+                    gitProvenance.getOrganizationName() + "/" + gitProvenance.getRepositoryName() + ".ast");
+            if (!(astFile.renameTo(astCompleteFile))) {
+                throw new RuntimeException("Unable to rename AST temp file " + astFile.getAbsolutePath() +
+                        " to final filename " + astCompleteFile.getAbsolutePath());
             }
         }
     }
