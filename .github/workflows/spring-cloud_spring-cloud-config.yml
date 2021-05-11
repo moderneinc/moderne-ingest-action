@@ -20,7 +20,7 @@ jobs:
           repository: spring-cloud/spring-cloud-config
           path: target
       - name: Ingest
-        uses: ./main/actions/java11
+        uses: ./main/actions/java8
         id: ingest
         with:
           gcpKey: ${{ secrets.GCR_KEY }}
