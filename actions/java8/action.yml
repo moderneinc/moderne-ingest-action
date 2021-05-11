@@ -1,5 +1,5 @@
-name: 'Ingest'
-description: 'Ingest the thing'
+name: 'Java 8 Ingest'
+description: 'Ingest using openjdk 8'
 inputs:
   styleName:
     description: 'Style name'

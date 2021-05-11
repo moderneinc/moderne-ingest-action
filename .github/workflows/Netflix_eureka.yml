@@ -20,7 +20,7 @@ jobs:
           repository: Netflix/eureka
           path: target
       - name: Ingest
-        uses: ./main
+        uses: ./actions/java8
         id: ingest
         with:
           gcpKey: ${{ secrets.GCR_KEY }}

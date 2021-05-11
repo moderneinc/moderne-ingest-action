@@ -20,7 +20,7 @@ jobs:
           repository: qos-ch/slf4j
           path: target
       - name: Ingest
-        uses: ./main
+        uses: ./actions/java11
         id: ingest
         with:
           gcpKey: ${{ secrets.GCR_KEY }}
