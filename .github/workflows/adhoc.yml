@@ -1,0 +1,31 @@
+name: Ad hoc ingest java 8
+
+on:
+  workflow_dispatch:
+    inputs:
+      repositoryToIngest:
+        description: "Github organization/repository"
+        required: true
+      javaVersion:
+        description: "Java version to use, 8 or 11"
+        required: true
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    name: Ingest
+    steps:
+      - name: Checkout self
+        uses: actions/checkout@v2
+        with:
+          path: main
+      - name: Checkout target
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ github.event.inputs.repositoryToIngest }}
+          path: target
+      - name: Ingest
+        uses: ./main/actions/java${{github.event.inputs.javaVersion}}
+        id: ingest
+        with:
+          gcpKey: ${{ secrets.GCR_KEY }}
