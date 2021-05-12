@@ -1,4 +1,4 @@
-name: Ad hoc ingest java 8
+name: Ad hoc ingest
 
 on:
   workflow_dispatch:
