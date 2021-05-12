@@ -6,8 +6,8 @@ on:
       repositoryToIngest:
         description: "Github organization/repository"
         required: true
-      javaVersion:
-        description: "Java version to use, 8 or 11"
+      ingestAction:
+        description: "./main/actions/java8 or ./main/actions/java11"
         required: true
 
 jobs:
@@ -25,7 +25,7 @@ jobs:
           repository: ${{ github.event.inputs.repositoryToIngest }}
           path: target
       - name: Ingest
-        uses: './main/actions/java${{ github.event.inputs.javaVersion }}'
+        uses: ${{ github.event.inputs.javaVersion }}
         id: ingest
         with:
           gcpKey: ${{ secrets.GCR_KEY }}
