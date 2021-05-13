@@ -26,3 +26,11 @@ jobs:
         id: ingest
         with:
           gcpKey: ${{ secrets.GCR_KEY }}
+      - name: Slack Notify on Failure
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_ALERTS_WEBHOOK }}
+          SLACK_USERNAME: moderne-ingest
+          SLACK_COLOR: red
+          SLACK_TITLE: Ingest workflow failure
