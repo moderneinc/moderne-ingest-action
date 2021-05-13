@@ -34,3 +34,4 @@ jobs:
           SLACK_USERNAME: moderne-ingest
           SLACK_COLOR: red
           SLACK_TITLE: Ingest workflow failure
+          SLACK_MESSAGE: We all have bad days
