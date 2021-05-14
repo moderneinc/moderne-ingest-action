@@ -1,21 +1,25 @@
 package io.moderne.ingest.parse;
 
-import com.google.common.collect.Lists;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ProjectConnection;
 import org.gradle.tooling.internal.consumer.DefaultGradleConnector;
+import org.gradle.tooling.model.GradleModuleVersion;
 import org.gradle.tooling.model.GradleProject;
 import org.gradle.tooling.model.Task;
+import org.gradle.tooling.model.build.BuildEnvironment;
+import org.gradle.tooling.model.eclipse.EclipseJavaSourceSettings;
 import org.gradle.tooling.model.eclipse.EclipseProject;
 import org.gradle.tooling.model.eclipse.EclipseProjectDependency;
 import org.gradle.tooling.model.eclipse.EclipseSourceDirectory;
+import org.gradle.tooling.model.gradle.ProjectPublications;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.SourceFile;
 import org.openrewrite.TreeSerializer;
+import org.openrewrite.internal.ListUtils;
 import org.openrewrite.java.JavaParser;
+import org.openrewrite.java.marker.JavaProvenance;
 import org.openrewrite.marker.GitProvenance;
-import org.openrewrite.marker.Markers;
 import org.openrewrite.properties.PropertiesParser;
 import org.openrewrite.xml.XmlParser;
 import org.openrewrite.yaml.YamlParser;
@@ -40,6 +44,7 @@ import java.util.regex.Pattern;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
+import static org.openrewrite.Tree.randomId;
 
 @Component
 public class GradleProjectParser implements ProjectParser {
@@ -70,10 +75,30 @@ public class GradleProjectParser implements ProjectParser {
             ((DefaultGradleConnector)gradleConnector).daemonMaxIdleTime(60, TimeUnit.SECONDS);
         }
 
+        String javaRuntimeVersion = System.getProperty("java.runtime.version");
+        String javaVendor = System.getProperty("java.vm.vendor");
+
         try (ProjectConnection connection = gradleConnector
                 .connect()) {
 
+            BuildEnvironment buildEnvironment = connection.getModel(BuildEnvironment.class);
+            String gradleVersion = buildEnvironment.getGradle().getGradleVersion();
+
+            String publicationGroup = null;
+            String publicationName = null;
+            String publicationVersion = null;
+            // For some reason, this does pick up a publication for rewrite-testing-frameworks, but not for rewrite,
+            // Netflix eureka, or Netflix genie. Must have something to do with an empty wrapper parent project?
+            ProjectPublications projectPublications = connection.getModel(ProjectPublications.class);
+            if (!projectPublications.getPublications().isEmpty()) {
+                GradleModuleVersion firstPublication = projectPublications.getPublications().getAt(0).getId();
+                publicationGroup = firstPublication.getGroup();
+                publicationName = firstPublication.getName();
+                publicationVersion = firstPublication.getVersion();
+            }
+
             GradleProject gradleProject = connection.model(GradleProject.class).get();
+            String projectName = gradleProject.getName();
             Set<String> taskNames = getTaskNames(gradleProject);
             taskNames.retainAll(potentialExcludeTasks);
             List<String> buildArguments = new ArrayList<>();
@@ -89,15 +114,55 @@ public class GradleProjectParser implements ProjectParser {
                     .run();
 
             EclipseProject eclipseProject = connection.model(EclipseProject.class).get();
-            parseEclipseProject(eclipseProject, eclipseProject, sourceFiles, projectDir, ctx);
+            EclipseJavaSourceSettings sourceSettings = eclipseProject.getJavaSourceSettings();
+            String sourceCompatibility = sourceSettings.getSourceLanguageLevel().toString();
+            String targetCompatibility = sourceSettings.getTargetBytecodeVersion().toString();
+
+            JavaProvenance.BuildTool buildTool = new JavaProvenance.BuildTool(JavaProvenance.BuildTool.Type.Gradle,
+                    gradleVersion);
+
+            JavaProvenance.JavaVersion javaVersion = new JavaProvenance.JavaVersion(
+                    javaRuntimeVersion,
+                    javaVendor,
+                    sourceCompatibility,
+                    targetCompatibility
+            );
+
+            JavaProvenance.Publication publication = new JavaProvenance.Publication(
+                    publicationGroup,
+                    publicationName,
+                    publicationVersion
+            );
+
+            JavaProvenance mainProvenance = new JavaProvenance(
+                    randomId(),
+                    projectName,
+                    "main",
+                    buildTool,
+                    javaVersion,
+                    publication
+            );
+
+            JavaProvenance testProvenance = new JavaProvenance(
+                    randomId(),
+                    projectName,
+                    "test",
+                    buildTool,
+                    javaVersion,
+                    publication
+            );
+
+            parseEclipseProject(eclipseProject, eclipseProject, sourceFiles, projectDir, ctx, mainProvenance,
+                    testProvenance);
         } finally {
             gradleConnector.disconnect();
         }
 
         GitProvenance gitProvenance = GitProvenance.fromProjectDirectory(projectDir);
+
         for (int i = 0; i < sourceFiles.size(); i++) {
             SourceFile sourceFile = sourceFiles.get(i);
-            sourceFiles.set(i, sourceFile.withMarkers(Markers.build(Lists.newArrayList(gitProvenance))));
+            sourceFiles.set(i, sourceFile.withMarkers(sourceFile.getMarkers().addIfAbsent(gitProvenance)));
         }
 
         return new ParseResult(gitProvenance, sourceFiles);
@@ -114,22 +179,33 @@ public class GradleProjectParser implements ProjectParser {
         return taskNames;
     }
 
-    private void parseEclipseProject(EclipseProject project, EclipseProject rootProject, List<SourceFile> sourceFiles, Path projectDir, ExecutionContext ctx) {
+    private void parseEclipseProject(EclipseProject project, EclipseProject rootProject, List<SourceFile> sourceFiles,
+                                     Path projectDir, ExecutionContext ctx, JavaProvenance mainProvenance,
+                                     JavaProvenance testProvenance) {
         for (EclipseSourceDirectory sourceDirectory : project.getSourceDirectories()) {
+            JavaProvenance sourceProvenance = mainProvenance;
+            if (sourceDirectory.getPath().contains("test")) {
+                sourceProvenance = testProvenance;
+            }
+            final JavaProvenance finalSourceProvenance = sourceProvenance;
             if (sourceDirectory.getPath().endsWith("/resources")) {
                 File resourceDirectory = sourceDirectory.getDirectory();
-                sourceFiles.addAll(new XmlParser().parse(getSources(resourceDirectory, "xml"), projectDir, ctx));
-                sourceFiles.addAll(new YamlParser().parse(getSources(resourceDirectory, "yml"), projectDir, ctx));
-                sourceFiles.addAll(new PropertiesParser().parse(getSources(resourceDirectory, "properties"), projectDir, ctx));
+                sourceFiles.addAll(ListUtils.map(new XmlParser().parse(getSources(resourceDirectory, "xml"), projectDir,
+                        ctx), s -> s.withMarkers(s.getMarkers().addIfAbsent(finalSourceProvenance))));
+                sourceFiles.addAll(ListUtils.map(new YamlParser().parse(getSources(resourceDirectory, "yml"), projectDir,
+                        ctx), s -> s.withMarkers(s.getMarkers().addIfAbsent(finalSourceProvenance))));
+                sourceFiles.addAll(ListUtils.map(new PropertiesParser().parse(getSources(resourceDirectory, "properties"),
+                        projectDir, ctx), s -> s.withMarkers(s.getMarkers().addIfAbsent(finalSourceProvenance))));
             } else {
                 JavaParser javaParser = JavaParser.fromJavaVersion().logCompilationWarningsAndErrors(true)
                         .classpath(dependencies(project, rootProject))
                         .build();
-                sourceFiles.addAll(javaParser.parse(getSources(sourceDirectory.getDirectory(), "java"), projectDir, ctx));
+                sourceFiles.addAll(ListUtils.map(javaParser.parse(getSources(sourceDirectory.getDirectory(), "java"),
+                        projectDir, ctx), s -> s.withMarkers(s.getMarkers().addIfAbsent(finalSourceProvenance))));
             }
         }
         for (EclipseProject subproject : project.getChildren()) {
-            parseEclipseProject(subproject, rootProject, sourceFiles, projectDir, ctx);
+            parseEclipseProject(subproject, rootProject, sourceFiles, projectDir, ctx, mainProvenance, testProvenance);
         }
     }
 
@@ -140,7 +216,8 @@ public class GradleProjectParser implements ProjectParser {
         return paths;
     }
 
-    private void addProjectDependencies(EclipseProjectDependency projectDependency, EclipseProject rootProject, Set<Path> classpathAcc) {
+    private void addProjectDependencies(EclipseProjectDependency projectDependency, EclipseProject rootProject,
+                                        Set<Path> classpathAcc) {
         EclipseProject dependencyProject = rootProject.getChildren().stream()
                 .filter(childProject -> childProject.getName().equals(projectDependency.getPath()))
                 .findAny()
@@ -177,7 +254,8 @@ public class GradleProjectParser implements ProjectParser {
         }
 
         BiPredicate<Path, BasicFileAttributes> predicate = (p, bfa) ->
-                bfa.isRegularFile() && Arrays.stream(fileTypes).anyMatch(type -> p.getFileName().toString().endsWith(type));
+                bfa.isRegularFile() && Arrays.stream(fileTypes).anyMatch(type ->
+                        p.getFileName().toString().endsWith(type));
         try {
             return Files.find(srcDir.toPath(), 999, predicate).collect(toList());
         } catch (IOException e) {
