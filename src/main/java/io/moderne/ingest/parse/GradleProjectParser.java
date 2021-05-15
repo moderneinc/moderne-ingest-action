@@ -197,7 +197,9 @@ public class GradleProjectParser implements ProjectParser {
                 sourceFiles.addAll(ListUtils.map(new PropertiesParser().parse(getSources(resourceDirectory, "properties"),
                         projectDir, ctx), s -> s.withMarkers(s.getMarkers().addIfAbsent(finalSourceProvenance))));
             } else {
-                JavaParser javaParser = JavaParser.fromJavaVersion().logCompilationWarningsAndErrors(true)
+                JavaParser javaParser = JavaParser.fromJavaVersion()
+                        .logCompilationWarningsAndErrors(true)
+                        .relaxedClassTypeMatching(true)
                         .classpath(dependencies(project, rootProject))
                         .build();
                 sourceFiles.addAll(ListUtils.map(javaParser.parse(getSources(sourceDirectory.getDirectory(), "java"),

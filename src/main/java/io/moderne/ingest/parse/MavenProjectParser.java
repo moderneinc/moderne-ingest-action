@@ -53,7 +53,9 @@ public class MavenProjectParser implements ProjectParser {
         org.openrewrite.maven.utilities.MavenProjectParser parser = new org.openrewrite.maven.utilities.MavenProjectParser(
                 downloader,
                 mavenParserBuilder,
-                JavaParser.fromJavaVersion().logCompilationWarningsAndErrors(true),
+                JavaParser.fromJavaVersion()
+                        .logCompilationWarningsAndErrors(true)
+                        .relaxedClassTypeMatching(true),
                 new InMemoryExecutionContext(errorConsumer)
         );
 
