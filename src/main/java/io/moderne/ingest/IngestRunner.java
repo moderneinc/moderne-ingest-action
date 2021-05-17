@@ -1,6 +1,7 @@
 package io.moderne.ingest;
 
 import io.moderne.ingest.service.IngestService;
+import org.openrewrite.internal.StringUtils;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.env.Environment;
@@ -40,6 +41,9 @@ public class IngestRunner implements ApplicationRunner {
         }
 
         if (args.containsOption("styleName")) {
+            if (StringUtils.isBlank(args.getOptionValues("styleName").get(0))) {
+                ingestService.ingest(projectDir, null);
+            }
             ingestService.ingest(projectDir, args.getOptionValues("styleName").get(0));
         } else {
             ingestService.ingest(projectDir, null);
