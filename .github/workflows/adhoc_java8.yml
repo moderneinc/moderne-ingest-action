@@ -9,6 +9,7 @@ on:
 
 jobs:
   ingest:
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     name: Ingest
     steps:
