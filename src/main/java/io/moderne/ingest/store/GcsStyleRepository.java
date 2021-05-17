@@ -2,6 +2,8 @@ package io.moderne.ingest.store;
 
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Storage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +13,8 @@ import java.nio.channels.Channels;
 @Profile("prod")
 @Component
 public class GcsStyleRepository implements StyleRepository {
+
+    private final Logger logger = LoggerFactory.getLogger(GcsStyleRepository.class);
 
     private static final String BUCKET_NAME = "moderne-styles";
 
@@ -22,6 +26,7 @@ public class GcsStyleRepository implements StyleRepository {
 
     @Override
     public InputStream getStyleInputStream(String styleName) {
+        logger.info("Loading style with name [{}] from GCS", styleName);
         Blob blob = storage.get(BUCKET_NAME, styleName + ".yml");
         if (blob == null) {
             throw new IllegalArgumentException(styleName + " not found");
