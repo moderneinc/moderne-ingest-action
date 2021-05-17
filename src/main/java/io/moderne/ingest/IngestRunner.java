@@ -41,10 +41,12 @@ public class IngestRunner implements ApplicationRunner {
         }
 
         if (args.containsOption("styleName")) {
-            if (StringUtils.isBlank(args.getOptionValues("styleName").get(0))) {
+            String styleName = args.getOptionValues("styleName").get(0);
+            if (StringUtils.isBlank(styleName)) {
                 ingestService.ingest(projectDir, null);
+            } else {
+                ingestService.ingest(projectDir, styleName);
             }
-            ingestService.ingest(projectDir, args.getOptionValues("styleName").get(0));
         } else {
             ingestService.ingest(projectDir, null);
         }
