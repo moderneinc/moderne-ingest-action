@@ -6,6 +6,9 @@ on:
       repositoryToIngest:
         description: "Github organization/repository"
         required: true
+      styleName:
+        description: "Style name"
+        required: false
 
 jobs:
   ingest:
@@ -27,6 +30,7 @@ jobs:
         id: ingest
         with:
           gcpKey: ${{ secrets.GCR_KEY }}
+          styleName: ${{ github.event.inputs.styleName }}
       - name: Slack Notify on Failure
         if: ${{ failure() }}
         uses: rtCamp/action-slack-notify@v2
