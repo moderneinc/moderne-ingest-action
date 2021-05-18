@@ -3,6 +3,9 @@ name: junit-team/junit4 ingest
 on:
   schedule:
     - cron: "0 */12 * * *"
+  push:
+    paths:
+      - 'EMERGENCY-INGEST.md'
   workflow_dispatch: {}
 
 jobs:

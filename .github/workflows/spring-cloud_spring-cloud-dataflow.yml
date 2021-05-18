@@ -3,6 +3,9 @@ name: spring-cloud/spring-cloud-dataflow ingest
 on:
   schedule:
     - cron: "0 */12 * * *"
+  push:
+    paths:
+      - 'EMERGENCY-INGEST.md'
   workflow_dispatch: {}
 
 jobs:
