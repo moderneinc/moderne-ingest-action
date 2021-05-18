@@ -65,12 +65,12 @@ public class IngestService {
 
         try {
             ParseResult parseResult;
-            if (Files.exists(projectDir.resolve("build.gradle")) || Files.exists(projectDir.resolve("build.gradle.kts"))) {
-                log.info("Parsing gradle project");
-                parseResult = gradleProjectParser.parse(projectDir);
-            } else if (Files.exists(projectDir.resolve("pom.xml"))) {
+            if (Files.exists(projectDir.resolve("pom.xml"))) {
                 log.info("Parsing maven project");
                 parseResult = mavenProjectParser.parse(projectDir);
+            } else if (Files.exists(projectDir.resolve("build.gradle")) || Files.exists(projectDir.resolve("build.gradle.kts"))) {
+                log.info("Parsing gradle project");
+                parseResult = gradleProjectParser.parse(projectDir);
             } else {
                 throw new IllegalArgumentException(projectDir + " doesn't contain build.gradle, build.gradle.kts, or pom.xml. Unable to parse project.");
             }
