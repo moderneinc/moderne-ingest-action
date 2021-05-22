@@ -1,4 +1,4 @@
-name: cerne/beadledom ingest
+name: cerner/beadledom ingest
 
 on:
   schedule:

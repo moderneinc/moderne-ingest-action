@@ -1,4 +1,4 @@
-name: cerne/bunsen ingest
+name: cerner/bunsen ingest
 
 on:
   schedule:

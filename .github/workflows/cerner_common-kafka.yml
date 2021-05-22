@@ -1,4 +1,4 @@
-name: cerne/common-kafka ingest
+name: cerner/common-kafka ingest
 
 on:
   schedule:
