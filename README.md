@@ -17,7 +17,8 @@ git clone for you. Since this is now being handled by a github action, ingest no
 git clone yourself before running ingest. 
 
 
-Run ingest via gradle: `./gradlew --args='{fully-qualified git checkout directory}'`
+Run ingest via gradle: `./gradlew bootRun --args='{fully-qualified git checkout directory}'`
 
 Run ingest via IntelliJ: Create a launch configuration for main class `io.moderne.ingest.IngestActionApplication`
 with program arguments {fully-qualified git checkout directory}.
+
