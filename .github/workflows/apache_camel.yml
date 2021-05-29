@@ -1,4 +1,4 @@
-name: apache/commons-codec ingest
+name: apache/camel ingest
 
 on:
   schedule:
@@ -21,7 +21,7 @@ jobs:
       - name: Checkout target
         uses: actions/checkout@v2
         with:
-          repository: apache/commons-codec
+          repository: apache/camel
           path: target
       - name: Ingest
         uses: ./main/actions/java11

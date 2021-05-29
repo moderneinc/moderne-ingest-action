@@ -1,4 +1,4 @@
-name: apache/commons-codec ingest
+name: citrusframework/citrus ingest
 
 on:
   schedule:
@@ -21,7 +21,7 @@ jobs:
       - name: Checkout target
         uses: actions/checkout@v2
         with:
-          repository: apache/commons-codec
+          repository: citrusframework/citrus
           path: target
       - name: Ingest
         uses: ./main/actions/java11
