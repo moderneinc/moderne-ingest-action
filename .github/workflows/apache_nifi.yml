@@ -1,4 +1,4 @@
-name: apache/commons-codec ingest
+name: apache/nifi ingest
 
 on:
   schedule:
@@ -21,10 +21,10 @@ jobs:
       - name: Checkout target
         uses: actions/checkout@v2
         with:
-          repository: apache/commons-codec
+          repository: apache/nifi
           path: target
       - name: Ingest
-        uses: ./main/actions/java11
+        uses: ./main/actions/java8
         id: ingest
         with:
           gcpKey: ${{ secrets.GCR_KEY }}
