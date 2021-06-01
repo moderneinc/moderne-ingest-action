@@ -50,7 +50,7 @@ dependencies {
     implementation("org.apache.commons:commons-compress:latest.release")
     implementation("org.tukaani:xz:latest.release")
 
-    runtimeOnly("org.rocksdb:rocksdbjni:latest.release")
+    implementation("org.rocksdb:rocksdbjni:latest.release")
 
     implementation("org.openrewrite:rewrite-maven:latest.integration")
     implementation("org.openrewrite:rewrite-java:latest.integration")

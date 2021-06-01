@@ -1,11 +1,11 @@
-name: quarkusio/quarkus
+name: airbnb/epoxy ingest
 
 on:
   schedule:
     - cron: "0 */12 * * *"
-#  push:
-#    paths:
-#      - 'EMERGENCY-INGEST.md'
+  push:
+    paths:
+      - 'EMERGENCY-INGEST.md'
   workflow_dispatch: {}
 
 jobs:
@@ -21,10 +21,10 @@ jobs:
       - name: Checkout target
         uses: actions/checkout@v2
         with:
-          repository: quarkusio/quarkus
+          repository: airbnb/epoxy
           path: target
       - name: Ingest
-        uses: ./main/actions/java8
+        uses: ./main/actions/java11
         id: ingest
         with:
           gcpKey: ${{ secrets.GCR_KEY }}
