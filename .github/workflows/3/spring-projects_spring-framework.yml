@@ -1,0 +1,41 @@
+name: spring-projects/spring-framework ingest
+
+on:
+  schedule:
+    - cron: "0 */3 * * *"
+  push:
+    paths:
+      - 'EMERGENCY-INGEST-3.md'
+  workflow_dispatch: {}
+
+jobs:
+  ingest:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    name: Ingest
+    steps:
+      - name: Checkout self
+        uses: actions/checkout@v2
+        with:
+          path: main
+      - name: Checkout target
+        uses: actions/checkout@v2
+        with:
+          repository: spring-projects/spring-framework
+          path: target
+      - name: Ingest
+        uses: ./main/actions/java8
+        id: ingest
+        with:
+          gcpKey: ${{ secrets.GCR_KEY }}
+          styleName: spring
+      - name: Slack Notify on Failure
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_ALERTS_WEBHOOK }}
+          SLACK_USERNAME: moderne-ingest
+          SLACK_COLOR: red
+          SLACK_ICON: https://image.pngaaa.com/813/2886813-middle.png
+          SLACK_TITLE: Ingest workflow failure
+          SLACK_MESSAGE: We all have bad days
