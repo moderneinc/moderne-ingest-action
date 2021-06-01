@@ -1,12 +1,12 @@
 name: quarkusio/quarkus
 
-on:
-  schedule:
-    - cron: "0 */12 * * *"
-  push:
-    paths:
-      - 'EMERGENCY-INGEST.md'
-  workflow_dispatch: {}
+#on:
+#  schedule:
+#    - cron: "0 */12 * * *"
+#  push:
+#    paths:
+#      - 'EMERGENCY-INGEST.md'
+#  workflow_dispatch: {}
 
 jobs:
   ingest:
