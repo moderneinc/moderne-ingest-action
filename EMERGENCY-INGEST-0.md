@@ -7,3 +7,4 @@ When we couldn't wait for the normal schedule...
 * 5/18/2021 - Apply `JavaType` circular type reference fix
 * 5/24/2021 - Wildcard types as bound types
 * 5/31/2021 - Autodetect styles
+* 6/1/2021  - Autodetect styles attempt #2
