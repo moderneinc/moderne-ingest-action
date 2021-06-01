@@ -41,7 +41,7 @@ public class MavenProjectParser implements ProjectParser {
                 null,
                 errorConsumer);
 
-        MavenPomCache pomCache = new RocksdbMavenPomCache(projectDir);
+        MavenPomCache pomCache = new RocksdbMavenPomCache(Paths.get(System.getProperty("user.home"), ".rewrite-cache", "poms"));
 
         MavenParser.Builder mavenParserBuilder = MavenParser.builder()
                 .cache(pomCache)
