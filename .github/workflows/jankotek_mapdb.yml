@@ -2,7 +2,7 @@ name: jankotek/mapdb ingest
 
 on:
   schedule:
-    - cron: "0 */1 * * *"
+    - cron: "0 1/12 * * *"
   push:
     paths:
       - 'EMERGENCY-INGEST-1.md'

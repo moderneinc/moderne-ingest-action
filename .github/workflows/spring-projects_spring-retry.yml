@@ -2,7 +2,7 @@ name: spring-projects/spring-retry ingest
 
 on:
   schedule:
-    - cron: "0 */4 * * *"
+    - cron: "0 4/12 * * *"
   push:
     paths:
       - 'EMERGENCY-INGEST-4.md'

@@ -2,7 +2,7 @@ name: rhatlapa/jboss-eap-quickstarts
 
 on:
   schedule:
-    - cron: "0 */3 * * *"
+    - cron: "0 3/12 * * *"
   push:
     paths:
       - 'EMERGENCY-INGEST-3.md'
