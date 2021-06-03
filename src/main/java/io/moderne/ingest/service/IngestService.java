@@ -3,6 +3,7 @@ package io.moderne.ingest.service;
 import io.moderne.ingest.parse.GradleProjectParser;
 import io.moderne.ingest.parse.MavenProjectParser;
 import io.moderne.ingest.parse.ParseResult;
+import io.moderne.ingest.parse.VendoredLibrariesProjectParser;
 import io.moderne.ingest.store.SourceFileRepository;
 import org.openrewrite.SourceFile;
 import org.openrewrite.config.Environment;
@@ -36,11 +37,15 @@ public class IngestService {
     private final MavenProjectParser mavenProjectParser;
     private final GradleProjectParser gradleProjectParser;
     private final SourceFileRepository sourceFileRepository;
+    private final VendoredLibrariesProjectParser vendoredLibrariesProjectParser;
 
     public IngestService(MavenProjectParser mavenProjectParser,
-                         GradleProjectParser gradleProjectParser, SourceFileRepository sourceFileRepository) {
+                         GradleProjectParser gradleProjectParser,
+                         VendoredLibrariesProjectParser vendoredLibrariesProjectParser,
+                         SourceFileRepository sourceFileRepository) {
         this.mavenProjectParser = mavenProjectParser;
         this.gradleProjectParser = gradleProjectParser;
+        this.vendoredLibrariesProjectParser = vendoredLibrariesProjectParser;
         this.sourceFileRepository = sourceFileRepository;
     }
 
@@ -53,6 +58,9 @@ public class IngestService {
             } else if (Files.exists(projectDir.resolve("build.gradle")) || Files.exists(projectDir.resolve("build.gradle.kts"))) {
                 log.info("Parsing gradle project at {}", projectDir);
                 parseResult = gradleProjectParser.parse(projectDir);
+            } else if (Files.exists(projectDir.resolve("lib"))) {
+                log.info("Parsing vendored libraries project at {}", projectDir);
+                parseResult = vendoredLibrariesProjectParser.parse(projectDir);
             } else {
                 throw new IllegalArgumentException(projectDir + " doesn't contain build.gradle, build.gradle.kts, or pom.xml. Unable to parse project.");
             }
@@ -94,7 +102,8 @@ public class IngestService {
 
             log.info("Storing AST");
             sourceFileRepository.store(parseResult);
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             log.error("Exception ingesting", e);
         }
     }
