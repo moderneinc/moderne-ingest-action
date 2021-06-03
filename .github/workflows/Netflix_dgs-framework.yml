@@ -28,7 +28,6 @@ jobs:
         id: ingest
         with:
           gcpKey: ${{ secrets.GCR_KEY }}
-          styleName: eureka
       - name: Slack Notify on Failure
         if: ${{ failure() }}
         uses: rtCamp/action-slack-notify@v2
