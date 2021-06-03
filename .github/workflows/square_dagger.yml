@@ -2,7 +2,7 @@ name: square/dagger ingest
 
 on:
   schedule:
-    - cron: "0 4/12 * * *"
+    - cron: "0 4,16 * * *"
   push:
     paths:
       - 'EMERGENCY-INGEST-4.md'

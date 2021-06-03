@@ -2,7 +2,7 @@ name: cloudfoundry/uaa ingest
 
 on:
   schedule:
-    - cron: "0 1/12 * * *"
+    - cron: "0 1,13 * * *"
   push:
     paths:
       - 'EMERGENCY-INGEST-1.md'

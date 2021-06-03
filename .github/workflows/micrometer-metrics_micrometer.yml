@@ -2,7 +2,7 @@ name: micrometer-metrics/micrometer ingest
 
 on:
   schedule:
-    - cron: "0 2/12 * * *"
+    - cron: "0 2,14 * * *"
   push:
     paths:
       - 'EMERGENCY-INGEST-2.md'

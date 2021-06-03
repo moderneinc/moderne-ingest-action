@@ -2,7 +2,7 @@ name: openrewrite/spring-petclinic-migration ingest
 
 on:
   schedule:
-    - cron: "0 3/12 * * *"
+    - cron: "0 3,15 * * *"
   push:
     paths:
       - 'EMERGENCY-INGEST-3.md'
