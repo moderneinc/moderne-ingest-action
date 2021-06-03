@@ -28,7 +28,7 @@ jobs:
         id: ingest
         with:
           gcpKey: ${{ secrets.GCR_KEY }}
-          styleName: spring
+          styleName: org.openrewrite.java.SpringFormat
       - name: Slack Notify on Failure
         if: ${{ failure() }}
         uses: rtCamp/action-slack-notify@v2
