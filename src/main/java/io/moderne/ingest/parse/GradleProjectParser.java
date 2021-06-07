@@ -109,7 +109,7 @@ public class GradleProjectParser implements ProjectParser {
             }
             // compile java sources
             connection.newBuild()
-                    .forTasks("assemble", "testClasses")
+                    .forTasks("classes", "testClasses")
                     .withArguments(buildArguments)
                     .run();
 
