@@ -23,6 +23,7 @@ jobs:
         with:
           repository: micrometer-metrics/micrometer
           path: target
+          fetch-depth: 0
       - name: Ingest
         uses: ./main/actions/java11
         id: ingest
