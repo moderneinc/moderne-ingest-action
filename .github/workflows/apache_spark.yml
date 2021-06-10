@@ -2,7 +2,7 @@ name: apache/spark ingest
 
 on:
   schedule:
-    - cron: "0 0,12 * * *"
+    - cron: "0 7 * * *"
   push:
     paths:
       - 'EMERGENCY-INGEST-0.md'
