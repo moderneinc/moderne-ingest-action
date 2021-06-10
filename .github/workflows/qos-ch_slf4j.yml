@@ -2,7 +2,7 @@ name: qos-ch/slf4j ingest
 
 on:
   schedule:
-    - cron: "0 3,15 * * *"
+    - cron: "0 0,12 * * *"
   push:
     paths:
       - 'EMERGENCY-INGEST-3.md'

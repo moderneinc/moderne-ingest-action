@@ -2,7 +2,7 @@ name: neo4j/docs-maven-plugin ingest
 
 on:
   schedule:
-    - cron: "0 2,14 * * *"
+    - cron: "0 0,12 * * *"
   push:
     paths:
       - 'EMERGENCY-INGEST-2.md'
