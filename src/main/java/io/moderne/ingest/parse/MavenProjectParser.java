@@ -5,7 +5,10 @@ import org.openrewrite.SourceFile;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.marker.GitProvenance;
 import org.openrewrite.maven.MavenParser;
-import org.openrewrite.maven.cache.*;
+import org.openrewrite.maven.cache.LocalMavenArtifactCache;
+import org.openrewrite.maven.cache.MavenPomCache;
+import org.openrewrite.maven.cache.ReadOnlyLocalMavenArtifactCache;
+import org.openrewrite.maven.cache.RocksdbMavenPomCache;
 import org.openrewrite.maven.internal.MavenDownloadingException;
 import org.openrewrite.maven.internal.MavenParsingException;
 import org.openrewrite.maven.utilities.MavenArtifactDownloader;
@@ -37,9 +40,7 @@ public class MavenProjectParser implements ProjectParser {
 
         MavenArtifactDownloader downloader = new MavenArtifactDownloader(ReadOnlyLocalMavenArtifactCache.mavenLocal().orElse(
                 new LocalMavenArtifactCache(Paths.get(System.getProperty("user.home"), ".rewrite-cache", "artifacts"))
-        ),
-                null,
-                errorConsumer);
+        ),null, errorConsumer);
 
         MavenPomCache pomCache = new RocksdbMavenPomCache(Paths.get(System.getProperty("user.home"), ".rewrite-cache", "poms"));
 

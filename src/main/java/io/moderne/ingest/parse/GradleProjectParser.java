@@ -99,62 +99,67 @@ public class GradleProjectParser implements ProjectParser {
 
             GradleProject gradleProject = connection.model(GradleProject.class).get();
             String projectName = gradleProject.getName();
-            Set<String> taskNames = getTaskNames(gradleProject);
-            taskNames.retainAll(potentialExcludeTasks);
-            List<String> buildArguments = new ArrayList<>();
-            buildArguments.add("-Dorg.gradle.jvmargs=\"-Xmx1g\"");
-            for (String taskName : taskNames) {
-                buildArguments.add("-x");
-                buildArguments.add(taskName);
-            }
-            // compile java sources
-            connection.newBuild()
-                    .forTasks("classes", "testClasses")
-                    .withArguments(buildArguments)
-                    .run();
 
             EclipseProject eclipseProject = connection.model(EclipseProject.class).get();
             EclipseJavaSourceSettings sourceSettings = eclipseProject.getJavaSourceSettings();
-            String sourceCompatibility = sourceSettings.getSourceLanguageLevel().toString();
-            String targetCompatibility = sourceSettings.getTargetBytecodeVersion().toString();
+            if(sourceSettings != null) {
+                String sourceCompatibility = sourceSettings.getSourceLanguageLevel().toString();
+                String targetCompatibility = sourceSettings.getTargetBytecodeVersion().toString();
 
-            JavaProvenance.BuildTool buildTool = new JavaProvenance.BuildTool(JavaProvenance.BuildTool.Type.Gradle,
-                    gradleVersion);
+                JavaProvenance.BuildTool buildTool = new JavaProvenance.BuildTool(JavaProvenance.BuildTool.Type.Gradle,
+                        gradleVersion);
 
-            JavaProvenance.JavaVersion javaVersion = new JavaProvenance.JavaVersion(
-                    javaRuntimeVersion,
-                    javaVendor,
-                    sourceCompatibility,
-                    targetCompatibility
-            );
+                JavaProvenance.JavaVersion javaVersion = new JavaProvenance.JavaVersion(
+                        javaRuntimeVersion,
+                        javaVendor,
+                        sourceCompatibility,
+                        targetCompatibility
+                );
 
-            JavaProvenance.Publication publication = new JavaProvenance.Publication(
-                    publicationGroup,
-                    publicationName,
-                    publicationVersion
-            );
+                JavaProvenance.Publication publication = new JavaProvenance.Publication(
+                        publicationGroup,
+                        publicationName,
+                        publicationVersion
+                );
 
-            JavaProvenance mainProvenance = new JavaProvenance(
-                    randomId(),
-                    projectName,
-                    "main",
-                    buildTool,
-                    javaVersion,
-                    publication
-            );
+                JavaProvenance mainProvenance = new JavaProvenance(
+                        randomId(),
+                        projectName,
+                        "main",
+                        buildTool,
+                        javaVersion,
+                        publication
+                );
 
-            JavaProvenance testProvenance = new JavaProvenance(
-                    randomId(),
-                    projectName,
-                    "test",
-                    buildTool,
-                    javaVersion,
-                    publication
-            );
+                JavaProvenance testProvenance = new JavaProvenance(
+                        randomId(),
+                        projectName,
+                        "test",
+                        buildTool,
+                        javaVersion,
+                        publication
+                );
 
-            parseEclipseProject(eclipseProject, eclipseProject, sourceFiles, projectDir, ctx, mainProvenance,
-                    testProvenance);
+                Set<String> taskNames = getTaskNames(gradleProject);
+                taskNames.retainAll(potentialExcludeTasks);
+                List<String> buildArguments = new ArrayList<>();
+                buildArguments.add("-Dorg.gradle.jvmargs=\"-Xmx1g\"");
+                for (String taskName : taskNames) {
+                    buildArguments.add("-x");
+                    buildArguments.add(taskName);
+                }
+
+                // compile java sources
+                connection.newBuild()
+                        .forTasks("classes", "testClasses")
+                        .withArguments(buildArguments)
+                        .run();
+
+                parseEclipseProject(eclipseProject, eclipseProject, sourceFiles, projectDir, ctx, mainProvenance,
+                        testProvenance);
+            }
         } finally {
+            //noinspection UnstableApiUsage
             gradleConnector.disconnect();
         }
 
