@@ -82,5 +82,5 @@ springBoot {
 }
 
 tasks.getByName<BootRun>("bootRun") {
-    jvmArgs.add("-XX:MaxRAMPercentage=75.0")
+    jvmArgs!!.add("-XX:MaxRAMPercentage=75.0")
 }
