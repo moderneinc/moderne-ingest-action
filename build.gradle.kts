@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.run.BootRun
+
 plugins {
     id("org.springframework.boot") version "2.4.3"
     java
@@ -77,4 +79,8 @@ extensions.findByName("buildScan")?.withGroovyBuilder {
 
 springBoot {
     mainClass.set("io.moderne.ingest.IngestActionApplication")
+}
+
+tasks.getByName<BootRun>("bootRun") {
+    jvmArgs.add("-XX:MaxRAMPercentage=75.0")
 }
