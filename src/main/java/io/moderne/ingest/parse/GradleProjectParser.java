@@ -216,10 +216,12 @@ public class GradleProjectParser implements ProjectParser {
             if (m.matches()) {
                 String sourceSet = m.group(1);
                 Path classesDir = project.getProjectDirectory().toPath().resolve("build/classes");
-                try {
-                    Files.walk(classesDir, 3).filter(p -> p.endsWith(sourceSet)).forEach(buildPaths::add);
-                } catch (IOException e) {
-                    throw new UncheckedIOException(e);
+                if(classesDir.toFile().exists()) {
+                    try {
+                        Files.walk(classesDir, 3).filter(p -> p.endsWith(sourceSet)).forEach(buildPaths::add);
+                    } catch (IOException e) {
+                        throw new UncheckedIOException(e);
+                    }
                 }
             } else {
                 log.warn("Unrecognized source directory {}", sourceDirectory.getPath());
