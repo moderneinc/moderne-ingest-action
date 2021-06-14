@@ -61,7 +61,7 @@ dependencies {
     runtimeOnly("org.openrewrite:rewrite-java-11:latest.integration")
     runtimeOnly("org.openrewrite:rewrite-java-8:latest.integration")
 
-    implementation("org.gradle:gradle-tooling-api:6.+")
+    implementation("org.gradle:gradle-tooling-api:latest.release")
 
     compileOnly("org.projectlombok:lombok:latest.release")
     annotationProcessor("org.projectlombok:lombok:latest.release")
