@@ -1,8 +1,8 @@
 name: geotools/geotools ingest
 
 on:
-  schedule:
-    - cron: "0 7 * * *"
+#  schedule:
+#    - cron: "0 7 * * *"
   push:
     paths:
       - 'EMERGENCY-INGEST-1.md'
