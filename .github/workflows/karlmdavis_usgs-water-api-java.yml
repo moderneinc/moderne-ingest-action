@@ -1,8 +1,8 @@
 name: karlmdavis/usgs-water-api-java
 
 on:
-#  schedule:
-#    - cron: "0 7 * * *"
+  schedule:
+    - cron: "0 7 * * *"
   push:
     paths:
       - 'EMERGENCY-INGEST-2.md'
