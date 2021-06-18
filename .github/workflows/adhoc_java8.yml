@@ -33,7 +33,7 @@ jobs:
         with:
           args: --style-name ${{ github.event.inputs.styleName }}
       - name: ingest without style
-        if: ${{ github.events.inputs.styleName == null }}
+        if: ${{ github.event.inputs.styleName == null }}
         uses: docker://moderne/ingest:java8-latest
         env:
           MODERNE_API_ACCESS_TOKEN: ${{ secrets.MODERNE_API_ACCESS_TOKEN }}
