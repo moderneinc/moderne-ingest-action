@@ -16,10 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Ingest
     steps:
-      - name: Dump github context
-        env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
-        run: echo "$GITHUB_CONTEXT"
       - name: Checkout repository to ingest
         uses: actions/checkout@v2
         with:
