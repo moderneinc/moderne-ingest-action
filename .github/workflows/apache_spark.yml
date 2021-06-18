@@ -14,15 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Ingest
     steps:
-      - name: Checkout self
-        uses: actions/checkout@v2
-        with:
-          path: main
-      - name: Checkout target
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           repository: apache/spark
-          path: target
       - name: Ingest
         uses: docker://moderne/ingest:java11-latest
         env:

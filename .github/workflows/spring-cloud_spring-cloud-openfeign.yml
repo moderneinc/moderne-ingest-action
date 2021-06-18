@@ -5,7 +5,7 @@ on:
     - cron: "0 7 * * *"
   push:
     paths:
-      - 'EMERGENCY-INGEST-3.md'
+      - 'EMERGENCY-INGEST-0.md'
   workflow_dispatch: {}
 
 jobs:
@@ -14,15 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Ingest
     steps:
-      - name: Checkout self
-        uses: actions/checkout@v2
-        with:
-          path: main
-      - name: Checkout target
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           repository: spring-cloud/spring-cloud-openfeign
-          path: target
       - name: Ingest
         uses: docker://moderne/ingest:java8-latest
         env:
