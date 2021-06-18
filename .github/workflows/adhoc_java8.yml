@@ -26,14 +26,14 @@ jobs:
           fetch-depth: 0
           repository: ${{ github.event.inputs.repositoryToIngest }}
       - name: ingest with style
-        if: ${{ github.event.inputs.styleName != '' }}
+        if: ${{ contains(github.event.inputs, styleName) }}
         uses: docker://moderne/ingest:java8-latest
         env:
           MODERNE_API_ACCESS_TOKEN: ${{ secrets.MODERNE_API_ACCESS_TOKEN }}
         with:
           args: --style-name ${{ github.event.inputs.styleName }}
       - name: ingest without style
-        if: ${{ github.events.inputs.styleName == '' }}
+        if: ${{ !contains(github.events.inputs, styleName) }}
         uses: docker://moderne/ingest:java8-latest
         env:
           MODERNE_API_ACCESS_TOKEN: ${{ secrets.MODERNE_API_ACCESS_TOKEN }}
