@@ -24,11 +24,11 @@ jobs:
           repository: spring-cloud/spring-cloud-dataflow
           path: target
       - name: Ingest
-        uses: ./main/actions/java8
-        id: ingest
+        uses: docker://moderne/ingest:java8-latest
+        env:
+          MODERNE_API_ACCESS_TOKEN: ${{ secrets.MODERNE_API_ACCESS_TOKEN }}
         with:
-          gcpKey: ${{ secrets.GCR_KEY }}
-          styleName: org.openrewrite.java.SpringFormat
+          args: --styleName org.openrewrite.java.SpringFormat
       - name: Slack Notify on Failure
         if: ${{ failure() }}
         uses: rtCamp/action-slack-notify@v2

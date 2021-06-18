@@ -1,5 +1,7 @@
 # moderne-ingest-action
 
+Just github actions workflows that leverage moderne-ingest-container
+
 ## Add repository for ingest in production
 
 See .github/workflows. Most use java 11, some use java 8 (all spring projects). Inspect the project's build to 
@@ -12,13 +14,4 @@ be `{github_org}/{github_repo} ingest`.
 
 ## Run ingest locally
 
-Make sure you're using the correct java version for the project being ingested. Prior versions of ingest performed the 
-git clone for you. Since this is now being handled by a github action, ingest no longer does this, so you'll have to 
-git clone yourself before running ingest. 
-
-
-Run ingest via gradle: `./gradlew bootRun --args='{fully-qualified git checkout directory}'`
-
-Run ingest via IntelliJ: Create a launch configuration for main class `io.moderne.ingest.IngestActionApplication`
-with program arguments {fully-qualified git checkout directory}.
-
+See [moderne-ingest-container](https://github.com/moderneinc/moderne-ingest-container)
