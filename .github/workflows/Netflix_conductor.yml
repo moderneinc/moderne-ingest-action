@@ -17,6 +17,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: Netflix/conductor
+          fetch-depth: 0
       - name: Ingest
         uses: docker://moderne/ingest:java8-latest
         env:

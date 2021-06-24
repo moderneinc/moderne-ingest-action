@@ -18,7 +18,7 @@ jobs:
         with:
           repository: Netflix/mantis
       - name: Ingest
-        uses: docker://moderne/ingest:java11-latest
+        uses: docker://moderne/ingest:java8-latest
         env:
           MODERNE_API_ACCESS_TOKEN: ${{ secrets.MODERNE_API_ACCESS_TOKEN }}
       - name: Slack Notify on Failure
