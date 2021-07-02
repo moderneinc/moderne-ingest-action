@@ -17,7 +17,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: quarkusio/quarkus-quickstarts
-          ref: 4f59ca24ffd2f4431cbb247dd3a764f791a89ae0
       - name: Ingest
         uses: docker://moderne/ingest:java11-latest
         env:
