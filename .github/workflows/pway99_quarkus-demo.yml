@@ -1,4 +1,4 @@
-name: pway99/quarkus-demo
+name: pway99/quarkus-demo ingest
 
 on:
   schedule:
