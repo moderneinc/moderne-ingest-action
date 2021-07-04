@@ -1,4 +1,4 @@
-name: kiegroup/jbpm ingest
+name: kiegroup/optaplanner ingest
 
 on:
   schedule:
@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: kiegroup/jbpm
+          repository: kiegroup/optaplanner
       - name: Ingest
         uses: docker://moderne/ingest:java11-latest
         env:
