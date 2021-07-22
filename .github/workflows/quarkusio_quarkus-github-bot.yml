@@ -1,4 +1,4 @@
-name: quarkus/quarkus-github-bot ingest
+name: quarkusio/quarkus-github-bot ingest
 
 on:
   schedule:
@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: quarkus/quarkus-github-bot
+          repository: quarkusio/quarkus-github-bot
       - name: Ingest
         uses: docker://moderne/ingest:java11-latest
         env:
