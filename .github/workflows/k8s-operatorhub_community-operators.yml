@@ -1,4 +1,4 @@
-name: operator-framework/community-operators ingest
+name: k8s-operatorhub/community-operators ingest
 
 on:
   schedule:
@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: operator-framework/community-operators
+          repository: k8s-operatorhub/community-operators
       - name: Ingest
         uses: docker://moderne/ingest:java11-latest
         env:
