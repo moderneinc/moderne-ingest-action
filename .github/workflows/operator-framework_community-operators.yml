@@ -1,4 +1,4 @@
-name: helm/charts ingest
+name: operator-framework/community-operators ingest
 
 on:
   schedule:
@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: helm/charts
+          repository: operator-framework/community-operators
       - name: Ingest
         uses: docker://moderne/ingest:java11-latest
         env:
