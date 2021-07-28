@@ -1,4 +1,4 @@
-name: spring-cloud/spring-cloud-stream-binder-kafka ingest
+name: spring-cloud/spring-cloud-jenkins-jobs ingest
 
 on:
   schedule:
@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: spring-cloud/spring-cloud-stream-binder-kafka
+          repository: spring-cloud/spring-cloud-jenkins-jobs
       - name: Ingest
         uses: docker://moderne/ingest:java11-latest
         env:
