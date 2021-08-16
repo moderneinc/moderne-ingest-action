@@ -6,8 +6,13 @@ import java.io.File
 // topJavaMavenProjects.csv taken from public dataset from
 // https://github.com/mast-group/mineSStuBs
 
-File("topJavaMavenProjects.csv").readLines().drop(1).forEach { line ->
-    val (org, repo) = "https://github.com/([^/]+)/(.*)".toRegex().find(line.substringBefore(','))!!.destructured
+val reader = File("topProjects.csv").bufferedReader()
+
+reader.readLine() // skip headers
+(1..500).forEach { _ ->
+    val line = reader.readLine()
+    println(line)
+    val (org, repo) = "https://api.github.com/repos/([^/]+)/(.*)".toRegex().find(line.substringBefore(','))!!.destructured
 
     val workflow = File(".github/workflows/${org}_${repo}.yml")
 
