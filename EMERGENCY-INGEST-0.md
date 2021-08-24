@@ -2,6 +2,7 @@
 
 When we couldn't wait for the normal schedule...
 
+* 8/24/2021 - Javadoc comments
 * 7/7/2021 - Reverted autodetection of import layout style.
 * 5/18/2021 - Suspect that changes to `JavaType` cause repositories to not be deserializable.
 * 5/18/2021 - Added all the repositories that had previously been ad-hoc added to bring them up to date with changes in AST.
