@@ -9,7 +9,7 @@ import java.io.File
 val reader = File("topProjects.csv").bufferedReader()
 
 reader.readLine() // skip headers
-(1..750).forEach { _ ->
+(1..1000).forEach { _ ->
     val line = reader.readLine()
     println(line)
     val (org, repo) = "https://api.github.com/repos/([^/]+)/(.*)".toRegex().find(line.substringBefore(','))!!.destructured
