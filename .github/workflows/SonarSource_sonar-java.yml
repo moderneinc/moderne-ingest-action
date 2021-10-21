@@ -1,4 +1,4 @@
-name: Sonarqube/sonar-java ingest
+name: SonarSource/sonar-java ingest
 
 on:
   schedule:
@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: Sonarqube/sonar-java
+          repository: SonarSource/sonar-java
       - name: Ingest
         uses: docker://moderne/ingest:java11-latest
         env:
