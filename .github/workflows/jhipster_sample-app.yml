@@ -21,13 +21,3 @@ jobs:
         uses: docker://moderne/ingest:java8-latest
         env:
           MODERNE_API_ACCESS_TOKEN: ${{ secrets.MODERNE_API_ACCESS_TOKEN }}
-      - name: Slack Notify on Failure
-        if: ${{ failure() }}
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_ALERTS_WEBHOOK }}
-          SLACK_USERNAME: moderne-ingest
-          SLACK_COLOR: red
-          SLACK_ICON: https://image.pngaaa.com/813/2886813-middle.png
-          SLACK_TITLE: Ingest workflow failure
-          SLACK_MESSAGE: We all have bad days
