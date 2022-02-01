@@ -2,6 +2,7 @@
 
 When we couldn't wait for the normal schedule...
 
+* 1/31/2022 - Base64 encoding
 * 1/30/2022 - Back reference substitution
 * 11/21/2021 - Recursive type attribution
 * 8/24/2021 - Javadoc comments
