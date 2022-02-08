@@ -23,7 +23,8 @@ jobs:
           repository: ${{ inputs.repository }}
       - uses: actions/cache@v2
         with:
-          path: ~/.rewrite-cache/poms
+          # path: ~/.rewrite-cache/poms
+          path: ~/.rewrite-cache
           key: ${{ runner.os }}-rewrite-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-rewrite-
