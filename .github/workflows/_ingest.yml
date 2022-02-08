@@ -24,9 +24,9 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: ~/.rewrite-cache/poms
-          key: ${{ inputs.repository }}-poms
+          key: ${{ runner.os }}-rewrite-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ inputs.repository }}-poms
+            ${{ runner.os }}-rewrite-
       - name: ingest
         uses: docker://moderne/ingest:java11-latest
         env:
