@@ -21,6 +21,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: ${{ inputs.repository }}
+      - uses: actions/cache@v2
+        with:
+          path: ~/.rewrite-cache/poms
+          key: ${{ inputs.repository }}-poms
       - name: ingest
         uses: docker://moderne/ingest:java11-latest
         env:
