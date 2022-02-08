@@ -4,7 +4,7 @@ name: ingest
 on:
   workflow_call:
     inputs:
-      repository_name:
+      repository:
         description: Repository to ingest; formatted as "organization/repository". As in, "moderneinc/moderne-ingest-action"
         type: string
         required: true
@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: ${{ inputs.repository_name }}
+          repository: ${{ inputs.repository }}
       - name: ingest
         uses: docker://moderne/ingest:java11-latest
         env:
