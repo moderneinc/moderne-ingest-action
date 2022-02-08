@@ -25,6 +25,8 @@ jobs:
         with:
           path: ~/.rewrite-cache/poms
           key: ${{ inputs.repository }}-poms
+          restore-keys: |
+            ${{ inputs.repository }}-poms
       - name: ingest
         uses: docker://moderne/ingest:java11-latest
         env:
