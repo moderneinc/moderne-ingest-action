@@ -33,4 +33,5 @@ jobs:
         env:
           MODERNE_API_ACCESS_TOKEN: ${{ secrets.moderne_api_access_token }}
       - run: ls -la
-      - run: ls ~/.rewrite-cache
+      - run: ls -la ~/
+      # - run: ls -la ~/.rewrite-cache
