@@ -1,0 +1,27 @@
+---
+name: ingest
+
+on:
+  workflow_call:
+    inputs:
+      repository_name:
+        description: Repository to ingest; formatted as "organization/repository". As in, "moderneinc/moderne-ingest-action"
+        type: string
+        required: true
+    secrets:
+      moderne_api_access_token:
+        description: Moderne ingest API access token
+        required: true
+
+jobs:
+  ingest:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: ${{ inputs.repository_name }}
+      - name: ingest
+        uses: docker://moderne/ingest:java11-latest
+        env:
+          MODERNE_API_ACCESS_TOKEN: ${{ secrets.moderne_api_access_token }}

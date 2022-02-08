@@ -1,3 +1,4 @@
+---
 name: Alluxio/alluxio ingest
 
 on:
@@ -5,19 +6,13 @@ on:
     - cron: "0 7 * * *"
   push:
     paths:
-      - 'EMERGENCY-INGEST-1.md'
+      - "EMERGENCY-INGEST-1.md"
   workflow_dispatch: {}
 
 jobs:
   ingest:
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    name: Ingest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          repository: Alluxio/alluxio
-      - name: Ingest
-        uses: docker://moderne/ingest:java11-latest
-        env:
-          MODERNE_API_ACCESS_TOKEN:     ${{ secrets.MODERNE_API_ACCESS_TOKEN }}
+    uses: ./.github/workflows/_ingest.yml@main
+    with:
+      repository: Alluxio/alluxio
+    secrets:
+      moderne_api_access_token: ${{ secrets.MODERNE_API_ACCESS_TOKEN }}
