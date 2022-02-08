@@ -11,7 +11,7 @@ on:
 
 jobs:
   ingest:
-    uses: ./.github/workflows/_ingest.yml@main
+    uses: ./.github/workflows/_ingest.yml
     with:
       repository: Alluxio/alluxio
     secrets:
