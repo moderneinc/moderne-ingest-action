@@ -2,6 +2,7 @@
 
 When we couldn't wait for the normal schedule...
 
+* 2/14/2022 - Fixed an infinite loop in Maven project parsing.
 * 2/7/2022 - New Maven model
 * 1/31/2022 - Base64 encoding
 * 1/30/2022 - Back reference substitution
