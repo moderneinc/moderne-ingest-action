@@ -18,6 +18,6 @@ jobs:
         with:
           repository: square/sqlbrite
       - name: Ingest
-        uses: docker://moderne/ingest:java8-latest
+        uses: docker://moderne/ingest:android30-latest
         env:
           MODERNE_API_ACCESS_TOKEN:     ${{ secrets.MODERNE_API_ACCESS_TOKEN }}
