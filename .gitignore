@@ -2,6 +2,5 @@
 .gradle/
 build/
 out/
-gradle*
 
 topProjects.csv
