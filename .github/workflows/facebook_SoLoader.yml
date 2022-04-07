@@ -1,4 +1,4 @@
-name: facebook/buck ingest
+name: facebook/SoLoader ingest
 
 on:
   schedule:
@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: facebook/buck
+          repository: facebook/SoLoader
       - name: Ingest
         uses: docker://moderne/ingest:java11-latest
         env:
