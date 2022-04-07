@@ -1,0 +1,23 @@
+name: bendezu/android-resource-override-finder ingest
+
+on:
+  schedule:
+    - cron: "0 8 * * *"
+  push:
+    paths:
+      - 'EMERGENCY-INGEST-8.md'
+  workflow_dispatch: {}
+
+jobs:
+  ingest:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    name: Ingest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: bendezu/android-resource-override-finder
+      - name: Ingest
+        uses: docker://moderne/ingest:java11-latest
+        env:
+          MODERNE_API_ACCESS_TOKEN:     ${{ secrets.MODERNE_API_ACCESS_TOKEN }}
