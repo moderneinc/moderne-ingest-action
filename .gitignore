@@ -2,5 +2,5 @@
 .gradle/
 build/
 out/
-
+plugins-with-urls.txt
 topProjects.csv
