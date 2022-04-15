@@ -1,0 +1,23 @@
+name: openmrs/openmrs-module-printer ingest
+
+on:
+  schedule:
+    - cron: "0 7 * * *"
+  push:
+    paths:
+      - 'EMERGENCY-INGEST-0.md'
+  workflow_dispatch: {}
+
+jobs:
+  ingest:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    name: Ingest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: openmrs/openmrs-module-printer
+      - name: Ingest
+        uses: docker://moderne/ingest:java11-latest
+        env:
+          MODERNE_API_ACCESS_TOKEN:     ${{ secrets.MODERNE_API_ACCESS_TOKEN }}
