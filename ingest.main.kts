@@ -23,9 +23,41 @@ options.addOption(
 val (org, repo) = "https://github.com/([^/]+)/(.*)".toRegex().find(args[0])!!.destructured
 
 val commandLine: CommandLine = DefaultParser().parse(options, args)
-val javaVersion: String = commandLine.getOptionValue("java-version", "11")
+val javaVersion: String? = commandLine.getOptionValue("java-version")
 
-File(".github/workflows/${org}_${repo}.yml").writeText("""
+val actionContents = if (javaVersion == null) {
+    """
+    name: $org/$repo ingest
+
+    on:
+      schedule:
+        - cron: "0 7 * * *"
+      push:
+        paths:
+          - 'EMERGENCY-INGEST-0.md'
+      workflow_dispatch: {}
+
+    jobs:
+      ingest:
+        timeout-minutes: 60
+        runs-on: ubuntu-latest
+        name: Ingest
+        steps:
+          - uses: actions/checkout@v2
+            with:
+              repository: $org/$repo
+          - name: Ingest Java 8
+            uses: docker://moderne/ingest:java8-latest
+            env:
+              MODERNE_API_ACCESS_TOKEN:     ${'$'}{{ secrets.MODERNE_API_ACCESS_TOKEN }}
+          - name: Ingest Java 11
+            if: $ {{ failure() }}
+            uses: docker://moderne/ingest:java11-latest
+            env:
+              MODERNE_API_ACCESS_TOKEN:     ${'$'}{{ secrets.MODERNE_API_ACCESS_TOKEN }}
+    """.trimIndent()
+} else {
+    """
     name: $org/$repo ingest
 
     on:
@@ -49,4 +81,7 @@ File(".github/workflows/${org}_${repo}.yml").writeText("""
             uses: docker://moderne/ingest:java${javaVersion}-latest
             env:
               MODERNE_API_ACCESS_TOKEN:     ${'$'}{{ secrets.MODERNE_API_ACCESS_TOKEN }}
-""".trimIndent())
+    """.trimIndent()
+}
+
+File(".github/workflows/${org}_${repo}.yml").writeText(actionContents)
